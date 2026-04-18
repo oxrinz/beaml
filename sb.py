@@ -7,6 +7,9 @@ from tinygrad.dtype import dtypes
 from tinygrad.renderer.amd.dsl import s, v, NULL
 from tinygrad.runtime.autogen.amd.rdna4.ins import *
 
+dev = Device[Device.DEFAULT]
+print(f"device={Device.DEFAULT} arch={dev.arch!r} renderer.target.arch={dev.renderer.target.arch!r}")
+
 N = 64
 
 def fill_kernel(Out):

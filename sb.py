@@ -7,8 +7,9 @@ from tinygrad.dtype import dtypes
 from tinygrad.renderer.amd.dsl import s, v, NULL
 from tinygrad.runtime.autogen.amd.rdna4.ins import *
 
-dev = Device[Device.DEFAULT]
-print(f"device={Device.DEFAULT} arch={dev.arch!r} renderer.target.arch={dev.renderer.target.arch!r}")
+DNAME = "AMD"
+dev = Device[DNAME]
+print(f"device={DNAME} arch={dev.arch!r} renderer.target.arch={dev.renderer.target.arch!r}")
 
 N = 64
 
@@ -25,10 +26,10 @@ def fill_kernel(Out):
     s_wait_storecnt(simm16=0),
     s_endpgm(),
   ]
-  return UOp(Ops.PROGRAM, src=(sink, UOp(Ops.DEVICE, arg=Device.DEFAULT),
+  return UOp(Ops.PROGRAM, src=(sink, UOp(Ops.DEVICE, arg=DNAME),
              UOp(Ops.LINEAR, src=tuple(UOp(Ops.INS, arg=x) for x in insts))))
 
-out = Tensor.empty(N, dtype=dtypes.float32)
+out = Tensor.empty(N, dtype=dtypes.float32, device=DNAME)
 out.realize()
 out = Tensor.custom_kernel(out, fxn=fill_kernel)[0]
 result = out.numpy()

@@ -17,7 +17,8 @@ def fill_kernel(Out):
     s_wait_kmcnt(simm16=0),                                             # wait for scalar load
     v_mov_b32_e32(v[1], 0x3f800000),                                    # v1 = 1.0f
     v_lshlrev_b32_e32(v[2], 2, v[0]),                                   # v2 = tid * 4 (byte offset)
-    global_store_b32(vaddr=v[2], vsrc=v[1], saddr=s[2:3]),             # out[tid] = 1.0f
+    v_mov_b32_e32(v[3], 0),                                             # v3 = 0 (upper 32 bits)
+    global_store_b32(vaddr=v[2:3], vsrc=v[1], saddr=s[2:3]),           # out[tid] = 1.0f
     s_wait_storecnt(simm16=0),
     s_endpgm(),
   ]
